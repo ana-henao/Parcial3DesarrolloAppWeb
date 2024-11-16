@@ -1,6 +1,7 @@
 import express from "express";
 import swaggerJsdoc from "swagger-jsdoc";
 import { DoctorRoute } from "./routers/doctorRoute.mjs";
+import { PatientRoute } from "./routers/patientRoute.mjs";
 import * as swaggerUi from "swagger-ui-express";
 
 const app = express();
@@ -28,8 +29,10 @@ app.get("/api-docs.json", (req, res) => {
 app.use(express.json());
 
 const doctorRoute = new DoctorRoute();
+const patientRoute = new PatientRoute();
 
 app.use("/doctor", doctorRoute.router);
+app.use("/patient", patientRoute.router);
 
 app.all("*", (req, res) => {
     res.status(404).send(JSON.stringify({ message: "invalid path" }));
