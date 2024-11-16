@@ -3,7 +3,7 @@ import { Appointment } from "../models/Appointment.mjs";
 import { CustomError } from "../CustomError.mjs";
 
 class AppointmentService{
-    create = async (patient_id, date, hour, doctor_id) => {
+    create = async (patient_id, appointmentDate, appointmentHour, doctor_id) => {
         const client = new Db();
         try {
           console.log("create appointment");
@@ -12,8 +12,8 @@ class AppointmentService{
                 medicalappointment (date, hour, patient_id, doctor_id)
             VALUES 
                 ($1, $2, $3, $4)
-            RETURNING id, date, hour;`,
-            [date, hour, patient_id, doctor_id]
+            RETURNING *;`,
+            [appointmentDate, appointmentHour, patient_id, doctor_id]
           );
           const { id, date, hour } = results.rows[0];
           return new Appointment(id, date, hour);
@@ -60,7 +60,7 @@ class AppointmentService{
       };
 
       
-      updateAppointment = async (appointment_id,patient_id, date, hour) => {
+      updateAppointment = async (appointment_id,patient_id, appointmentDate, appointmentHour) => {
         const client = new Db();
         try {
           console.log("update appointment");
@@ -68,7 +68,7 @@ class AppointmentService{
             `UPDATE medicalappointment
             SET date = $1, hour = $2, patient_id = $3
             WHERE id = $4;`,
-            [date,hour,patient_id,appointment_id]
+            [appointmentDate,appointmentHour,patient_id,appointment_id]
           );
           const { id, date, hour } = results.rows[0];
           return new Appointment(id, date, hour);
@@ -84,7 +84,7 @@ class AppointmentService{
           console.log("update appointment");
           const results = await client.query(
             `DELETE FROM medicalappointment
-            WHERE id = $1`,
+            WHERE id = $1;`,
             [appointment_id]
           );
           const { id, date, hour } = results.rows[0];

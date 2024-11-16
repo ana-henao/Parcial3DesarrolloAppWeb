@@ -34,7 +34,7 @@ class DoctorController{
             }else{
                 result = await this.#service.getAllApointmentsByDate(date);
             }
-            res.status(201).send(result);
+            res.send(result);
           } catch (error) {
               return res
                 .status(500)

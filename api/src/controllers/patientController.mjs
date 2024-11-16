@@ -13,7 +13,7 @@ class PatientController{
         }
         try {
             const result = await this.#service.getOne(patientid);
-            res.status(201).send(result);
+            res.status(200).send(result);
           } catch (error) {
               return res
                 .status(500)
@@ -28,7 +28,7 @@ class PatientController{
             }
         try {
             result = await this.#service.getAllApointmentsByPatientId(patientid);
-            res.status(201).send(result);
+            res.send(result);
           } catch (error) {
               return res
                 .status(500)
