@@ -1,0 +1,112 @@
+import { Db } from "../config/db.mjs";
+
+class AppointmentService{
+    create = async (patient_id, date, hour, doctor_id) => {
+        const client = new Db();
+        try {
+          console.log("create appointment");
+          const results = await client.query(
+            `INSERT INTO 
+                medicalappointment (date, hour, patient_id, doctor_id)
+            VALUES 
+                ($1, $2, $3, $4)
+            RETURNING course_code, student_dni, semester;`,
+            [date, hour, patient_id, doctor_id]
+          );
+          console.log(results);
+          return results.rows[0];
+        } catch (error) {
+          console.log("error at create appointment", error);
+          throw new CustomError(error.code, error.detail);
+        }
+      };
+
+      getAllApointments = async (doctor_id) => {
+        const client = new Db();
+        try {
+          console.log("get appointments by date");
+          const results = await client.query(
+            `SELECT * FROM medicalappointment
+            WHERE doctor_id = $1;`,
+            [doctor_id]
+          );
+          console.log(results);
+          return results.rows[0];
+        } catch (error) {
+          console.log("error at get all appointments by date", error);
+          throw new CustomError(error.code, error.detail);
+        }
+      };
+
+      getAllApointmentsByDate = async (date, doctor_id) => {
+        const client = new Db();
+        try {
+          console.log("get appointments by date");
+          const results = await client.query(
+            `SELECT * FROM medicalappointment
+            WHERE doctor_id = $1 AND date = $2;`,
+            [doctor_id,date]
+          );
+          console.log(results);
+          return results.rows[0];
+        } catch (error) {
+          console.log("error at get all appointments by date", error);
+          throw new CustomError(error.code, error.detail);
+        }
+      };
+
+      getAllApointmentsByPatientId = async (patient_id) => {
+        const client = new Db();
+        try {
+          console.log("get appointments by patient id");
+          const results = await client.query(
+            `SELECT * FROM medicalappointment
+            WHERE patient_id = $1;`,
+            [patient_id]
+          );
+          console.log(results);
+          return results.rows[0];
+        } catch (error) {
+          console.log("error at get all appointments by patient id", error);
+          throw new CustomError(error.code, error.detail);
+        }
+      };
+
+      
+      updateAppointment = async (appointment_id,patient_id, date, hour) => {
+        const client = new Db();
+        try {
+          console.log("update appointment");
+          const results = await client.query(
+            `UPDATE medicalappointment
+            SET date = $1, hour = $2, patient_id = $3
+            WHERE id = $4;`,
+            [date,hour,patient_id,appointment_id]
+          );
+          console.log(results);
+          return results.rows[0];
+        } catch (error) {
+          console.log("error at update appointment", error);
+          throw new CustomError(error.code, error.detail);
+        }
+      };
+
+      deleteAppointment = async (appointment_id) => {
+        const client = new Db();
+        try {
+          console.log("update appointment");
+          const results = await client.query(
+            `DELETE FROM medicalappointment
+            WHERE id = $1`,
+            [appointment_id]
+          );
+          console.log(results);
+          return results.rows[0];
+        } catch (error) {
+          console.log("error at update appointment", error);
+          throw new CustomError(error.code, error.detail);
+        }
+      };
+}
+
+export { AppointmentService };
