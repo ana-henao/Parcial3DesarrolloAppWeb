@@ -67,7 +67,8 @@ class AppointmentService{
           const results = await client.query(
             `UPDATE medicalappointment
             SET date = $1, hour = $2, patient_id = $3
-            WHERE id = $4;`,
+            WHERE id = $4
+            RETURNING *;`,
             [appointmentDate,appointmentHour,patient_id,appointment_id]
           );
           const { id, date, hour } = results.rows[0];
