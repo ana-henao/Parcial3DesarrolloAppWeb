@@ -58,24 +58,6 @@ class AppointmentService{
         }
       };
 
-      getAllApointmentsByPatientId = async (patient_id) => {
-        const client = new Db();
-        try {
-          console.log("get appointments by patient id");
-          const results = await client.query(
-            `SELECT * FROM medicalappointment
-            WHERE patient_id = $1;`,
-            [patient_id]
-          );
-          return results.rows.map(
-            ({ id, date, hour }) => new Appointment(id, date, hour)
-          );
-        } catch (error) {
-          console.log("error at get all appointments by patient id", error);
-          throw new CustomError(error.code, error.detail);
-        }
-      };
-
       
       updateAppointment = async (appointment_id,patient_id, date, hour) => {
         const client = new Db();

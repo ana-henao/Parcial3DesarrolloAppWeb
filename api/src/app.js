@@ -1,6 +1,7 @@
 import express from "express";
 import swaggerJsdoc from "swagger-jsdoc";
 import { DoctorRoute } from "./routers/doctorRoute.mjs";
+import * as swaggerUi from "swagger-ui-express";
 
 const app = express();
 
@@ -28,7 +29,7 @@ app.use(express.json());
 
 const doctorRoute = new DoctorRoute();
 
-app.use("/doctor", courseRoutes.router);
+app.use("/doctor", doctorRoute.router);
 
 app.all("*", (req, res) => {
     res.status(404).send(JSON.stringify({ message: "invalid path" }));
