@@ -1,4 +1,5 @@
 import { Db } from "../config/db.mjs";
+import { Appointment } from "../models/Appointment.mjs";
 
 class AppointmentService{
     create = async (patient_id, date, hour, doctor_id) => {
@@ -10,11 +11,11 @@ class AppointmentService{
                 medicalappointment (date, hour, patient_id, doctor_id)
             VALUES 
                 ($1, $2, $3, $4)
-            RETURNING course_code, student_dni, semester;`,
+            RETURNING id, date, hour;`,
             [date, hour, patient_id, doctor_id]
           );
-          console.log(results);
-          return results.rows[0];
+          const { id, date, hour } = results.rows[0];
+          return new Appointment(id, date, hour);
         } catch (error) {
           console.log("error at create appointment", error);
           throw new CustomError(error.code, error.detail);
@@ -30,8 +31,9 @@ class AppointmentService{
             WHERE doctor_id = $1;`,
             [doctor_id]
           );
-          console.log(results);
-          return results.rows[0];
+          return results.rows.map(
+            ({ id, date, hour }) => new Appointment(id, date, hour)
+          );
         } catch (error) {
           console.log("error at get all appointments by date", error);
           throw new CustomError(error.code, error.detail);
@@ -47,8 +49,9 @@ class AppointmentService{
             WHERE doctor_id = $1 AND date = $2;`,
             [doctor_id,date]
           );
-          console.log(results);
-          return results.rows[0];
+          return results.rows.map(
+            ({ id, date, hour }) => new Appointment(id, date, hour)
+          );
         } catch (error) {
           console.log("error at get all appointments by date", error);
           throw new CustomError(error.code, error.detail);
@@ -64,8 +67,9 @@ class AppointmentService{
             WHERE patient_id = $1;`,
             [patient_id]
           );
-          console.log(results);
-          return results.rows[0];
+          return results.rows.map(
+            ({ id, date, hour }) => new Appointment(id, date, hour)
+          );
         } catch (error) {
           console.log("error at get all appointments by patient id", error);
           throw new CustomError(error.code, error.detail);
@@ -83,8 +87,8 @@ class AppointmentService{
             WHERE id = $4;`,
             [date,hour,patient_id,appointment_id]
           );
-          console.log(results);
-          return results.rows[0];
+          const { id, date, hour } = results.rows[0];
+          return new Appointment(id, date, hour);
         } catch (error) {
           console.log("error at update appointment", error);
           throw new CustomError(error.code, error.detail);
@@ -100,8 +104,8 @@ class AppointmentService{
             WHERE id = $1`,
             [appointment_id]
           );
-          console.log(results);
-          return results.rows[0];
+          const { id, date, hour } = results.rows[0];
+          return new Appointment(id, date, hour);
         } catch (error) {
           console.log("error at update appointment", error);
           throw new CustomError(error.code, error.detail);

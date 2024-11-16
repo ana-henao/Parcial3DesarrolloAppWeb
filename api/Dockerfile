@@ -1,5 +1,5 @@
 FROM node:22
-WORKDIR /myapp
+WORKDIR /src
 COPY src/package*.json .
 RUN npm install
 COPY  src/ ./
