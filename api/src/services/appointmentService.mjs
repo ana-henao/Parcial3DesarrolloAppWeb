@@ -1,5 +1,6 @@
 import { Db } from "../config/db.mjs";
 import { Appointment } from "../models/Appointment.mjs";
+import { CustomError } from "../CustomError.mjs";
 
 class AppointmentService{
     create = async (patient_id, date, hour, doctor_id) => {

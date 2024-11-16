@@ -1,6 +1,7 @@
 import { Db } from "../config/db.mjs";
 import { Appointment } from "../models/Appointment.mjs";
 import { Patient } from "../models/Patient.mjs";
+import { CustomError } from "../CustomError.mjs";
 
 class Patientervice{
 
